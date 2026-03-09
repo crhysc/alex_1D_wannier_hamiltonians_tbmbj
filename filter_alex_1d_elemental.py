@@ -2,8 +2,8 @@
 
 # python filter_alex_1d_elemental.py \
 #   --dataset alex_pbe_1d_all \
-#   --store-dir "./alex_pbe_1d_all_cache" \
-#   --outdir "./alex_pbe_1d_all_elemental"
+#   --store-dir "$SCRATCH/alex_pbe_1d_all_cache" \
+#   --outdir "$SCRATCH/alex_pbe_1d_all_elemental"
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ def get_unique_elements(entry: dict) -> list[str]:
     """
     Try several routes to infer the unique chemical species in a JARVIS entry.
     Priority:
-      1. atoms dict -> Atoms.from_dict(...).composition
+      1. atoms dict -> Atoms.from_dict(...).uniq_species
       2. explicit elements field
       3. formula-like fields
     """
@@ -36,7 +36,7 @@ def get_unique_elements(entry: dict) -> list[str]:
     if atoms_dict is not None:
         try:
             atoms = Atoms.from_dict(atoms_dict)
-            return sorted(atoms.composition.keys())
+            return sorted(atoms.uniq_species)
         except Exception:
             pass
 
@@ -86,14 +86,14 @@ def main() -> None:
 
     outdir = Path(args.outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
-    
+
     if args.store_dir is not None:
         store_dir = Path(args.store_dir).resolve()
         store_dir.mkdir(parents=True, exist_ok=True)
         store_dir_str = str(store_dir)
     else:
         store_dir_str = None
-    
+
     print(f"Downloading/loading dataset: {args.dataset}")
     records = data(args.dataset, store_dir=store_dir_str)
     print(f"Total records loaded: {len(records)}")
