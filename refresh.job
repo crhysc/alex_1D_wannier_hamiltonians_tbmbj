@@ -40,5 +40,5 @@ echo ""
 echo "===== START COMPUTATION ========"
 python nanowire_tbmbj_dft.py refresh-status \
   --jsonl alex_pbe_1d_all_all_structures.jsonl \
-  --superdir $./nanowire_tbmbj_dataset
+  --superdir ./nanowire_tbmbj_dataset
 echo "===== JOB FINISHED ============="
